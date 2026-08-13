@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: group-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: group-service
+  template:
+    metadata:
+      labels:
+        app: group-service
+    spec:
+      containers:
+        - name: group-service
+          image: dilipmaurya/splitsettle-group-service:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8082
+          env:
+            - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+              value: "http://eureka-service:8761/eureka"
+            - name: SPRING_DATASOURCE_URL
+              value: "jdbc:postgresql://ep-young-sun-ay45lka5-pooler.c-5.us-east-2.aws.neon.tech:5432/group_db?sslmode=require&options=-c%20timezone=Asia/Kolkata"
+            - name: SPRING_DATASOURCE_USERNAME
+              value: "neondb_owner"
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: "npg_JLfWQdeu53wZ"
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              value: "kafka-service:9092"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: group-service
+spec:
+  selector:
+    app: group-service
+  ports:
+    - port: 8082
+      targetPort: 8082
+  type: ClusterIP

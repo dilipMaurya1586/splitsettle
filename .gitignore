@@ -1,0 +1,8 @@
+target/
+*.class
+.idea/
+.env
+node_modules/
+.mvn/
+**/.env
+.env
