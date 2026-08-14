@@ -39,3 +39,63 @@ jobs:
         run: |
           docker build -t ghcr.io/dilipmaurya1586/user-service:latest .
           docker push ghcr.io/dilipmaurya1586/user-service:latest
+
+  deploy:
+    needs: build
+    runs-on: self-hosted
+    defaults:
+      run:
+        working-directory: k8s
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy to Kubernetes
+        run: |
+          kubectl apply -f user.yaml
+          kubectl rollout restart deployment user-service
+
+
+
+
+
+#name: CI - User Service
+#
+#on:
+#  push:
+#    branches: [main]
+#    paths:
+#      - 'user-service/**'
+#  workflow_dispatch:
+#
+#jobs:
+#  build:
+#    runs-on: ubuntu-latest
+#    permissions:
+#      contents: read
+#      packages: write
+#    defaults:
+#      run:
+#        working-directory: user-service
+#    steps:
+#      - uses: actions/checkout@v4
+#
+#      - name: Set up JDK 21
+#        uses: actions/setup-java@v4
+#        with:
+#          java-version: '21'
+#          distribution: 'temurin'
+#
+#      - name: Build with Maven
+#        run: mvn clean package -DskipTests
+#
+#      - name: Log in to GitHub Container Registry
+#        uses: docker/login-action@v3
+#        with:
+#          registry: ghcr.io
+#          username: ${{ github.actor }}
+#          password: ${{ secrets.GITHUB_TOKEN }}
+#
+#      - name: Build and push Docker image
+#        run: |
+#          docker build -t ghcr.io/dilipmaurya1586/user-service:latest .
+#          docker push ghcr.io/dilipmaurya1586/user-service:latest

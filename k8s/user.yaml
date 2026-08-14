@@ -14,8 +14,10 @@ spec:
     spec:
       containers:
         - name: user-service
-          image: dilipmaurya/splitsettle-user-service:latest
-          imagePullPolicy: Never
+          image: ghcr.io/dilipmaurya1586/user-service:latest
+          imagePullPolicy: Always
+#          image: dilipmaurya/splitsettle-user-service:latest
+#          imagePullPolicy: Never
           ports:
             - containerPort: 8081
           env:
