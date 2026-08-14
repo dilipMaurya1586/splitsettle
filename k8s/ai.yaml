@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
         - name: ai-service
-          image: dilipmaurya/splitsettle-ai-service:latest
-          imagePullPolicy: Never
+          image: ghcr.io/dilipmaurya1586/ai-service:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8085
           env:

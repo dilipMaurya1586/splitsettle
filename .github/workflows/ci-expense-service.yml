@@ -39,3 +39,17 @@ jobs:
         run: |
           docker build -t ghcr.io/dilipmaurya1586/expense-service:latest .
           docker push ghcr.io/dilipmaurya1586/expense-service:latest
+
+  deploy:
+    needs: build
+    runs-on: self-hosted
+    defaults:
+      run:
+        working-directory: k8s
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy to Kubernetes
+        run: |
+          kubectl apply -f expense.yaml
+          kubectl rollout restart deployment expense-service

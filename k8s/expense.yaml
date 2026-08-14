@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
         - name: expense-service
-          image: dilipmaurya/splitsettle-expense-service:latest  # note: your image name is express-service? but you used expense-service earlier, check
-          imagePullPolicy: Never
+          image: ghcr.io/dilipmaurya1586/expense-service:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8083
           env:

@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
         - name: eureka-server
-          image: dilipmaurya/splitsettle-eureka-server:latest
-          imagePullPolicy: Never
+          image: ghcr.io/dilipmaurya1586/eureka-server:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8761
 ---

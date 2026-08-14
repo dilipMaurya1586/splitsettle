@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
         - name: api-gateway
-          image: dilipmaurya/splitsettle-api-gateway:latest
-          imagePullPolicy: Never
+          image: ghcr.io/dilipmaurya1586/api-gateway:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           env:

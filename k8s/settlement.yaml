@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
         - name: settlement-service
-          image: dilipmaurya/splitsettle-settlement-service:latest
-          imagePullPolicy: Never
+          image: ghcr.io/dilipmaurya1586/settlement-service:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8084
           env:

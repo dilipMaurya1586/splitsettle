@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
         - name: group-service
-          image: dilipmaurya/splitsettle-group-service:latest
-          imagePullPolicy: Never
+          image: ghcr.io/dilipmaurya1586/group-service:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8082
           env:

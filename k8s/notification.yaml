@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
         - name: notification-service
-          image: dilipmaurya/splitsettle-notification-service:latest
-          imagePullPolicy: Never
+          image: ghcr.io/dilipmaurya1586/notification-service:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8086
           env:
