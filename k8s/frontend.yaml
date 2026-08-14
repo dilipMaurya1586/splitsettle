@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: splitsettle-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: splitsettle-frontend
+  template:
+    metadata:
+      labels:
+        app: splitsettle-frontend
+    spec:
+      containers:
+        - name: splitsettle-frontend
+          image: ghcr.io/dilipmaurya1586/splitsettle-frontend:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: splitsettle-frontend-service
+spec:
+  selector:
+    app: splitsettle-frontend
+  ports:
+    - port: 3000
+      targetPort: 80
+  type: LoadBalancer
