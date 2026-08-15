@@ -1,1 +1,235 @@
-# splitsettle
+<div align="center">
+
+# 💸 SplitSettle
+
+### Group Expense Sharing & Settlement Platform
+
+*Split it. Track it. Settle it — in the fewest transactions possible.*
+
+<br/>
+
+![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
+![React](https://img.shields.io/badge/React%2019-61DAFB?style=for-the-badge&logo=react&logoColor=black)
+![Kafka](https://img.shields.io/badge/Apache%20Kafka-231F20?style=for-the-badge&logo=apachekafka&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![Kubernetes](https://img.shields.io/badge/Kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white)
+
+![Build](https://img.shields.io/badge/build-passing-brightgreen?style=flat-square)
+![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)
+![Status](https://img.shields.io/badge/status-active-success?style=flat-square)
+![Made With](https://img.shields.io/badge/made%20with-☕%20%2B%20⚛️-orange?style=flat-square)
+
+[Live Demo](#) · [Report Bug](#) · [Request Feature](#)
+
+</div>
+
+<br/>
+
+## 📌 The Problem
+
+Trips, roommates, or shared bills always end in the same awkward moment:
+
+> *"Wait... who owes who, and how much?"*
+
+Manually tracking group expenses across 5-6 people leads to confusion, forgotten dues, and messy WhatsApp math. **SplitSettle** solves this with an automated, event-driven backend that calculates exactly who needs to pay whom — using the **minimum number of transactions possible.**
+
+<br/>
+
+## ✨ What It Does
+
+| Feature | Description |
+|---|---|
+| 👥 **Group Management** | Create groups, add members, manage multiple circles (trips, roommates, projects) |
+| 🧾 **Expense Tracking** | Log expenses, split by amount/percentage/equal share, filter by member or date |
+| 🧮 **Debt Simplification Engine** | Custom algorithm reduces N-way group debt into the minimum possible number of settlements |
+| 🔔 **Real-Time Notifications** | Async, event-driven alerts when expenses or settlements are updated |
+| 🔐 **Secure Auth** | JWT-based authentication across every service |
+| 📊 **Settlement Dashboard** | See pending balances, mark payments as settled, view full history |
+
+<br/>
+
+## 🏗️ System Architecture
+
+SplitSettle isn't a monolith with a database bolted on — it's built as **8 independently deployable microservices**, each with a single responsibility, discovered dynamically and routed through a central gateway.
+
+```
+                              ┌──────────────────────┐
+                              │   React 19 Frontend   │
+                              │   (Vercel)             │
+                              └───────────┬───────────┘
+                                          │  HTTPS
+                              ┌───────────▼───────────┐
+                              │     API Gateway        │
+                              │  (Spring Cloud Gateway)│
+                              └───────────┬───────────┘
+                                          │
+                    ┌───────────┬────────┼────────┬───────────┬──────────────┐
+                    │           │        │         │           │              │
+              ┌─────▼────┐┌────▼────┐┌───▼────┐┌───▼──────┐┌───▼─────┐┌───────▼───────┐
+              │  User    ││  Group  ││Expense ││Settlement││   AI    ││ Notification  │
+              │ Service  ││ Service ││Service ││ Service  ││ Service ││   Service     │
+              └─────┬────┘└────┬────┘└───┬────┘└───┬──────┘└───┬─────┘└───────┬───────┘
+                    │           │        │         │           │              │
+                    └───────────┴────────┴─────────┴───────────┴──────────────┘
+                                          │
+                              ┌───────────▼───────────┐
+                              │   Apache Kafka (Aiven) │
+                              │  async event streaming │
+                              └───────────┬───────────┘
+                                          │
+                              ┌───────────▼───────────┐
+                              │   PostgreSQL (Neon)    │
+                              └────────────────────────┘
+
+              All services registered with Eureka Service Discovery
+              Containerized with Docker · Orchestrated with Kubernetes
+```
+
+<br/>
+
+## 🧠 The Core Algorithm
+
+At the heart of SplitSettle is a **debt-simplification engine**. Instead of settling every pairwise debt individually (which can mean dozens of transactions in a large group), it collapses the entire group's balance sheet into the fewest possible transfers.
+
+```
+Before:  A owes B ₹500   |   B owes C ₹500   |   C owes A ₹200
+After:   A owes C ₹300   |   B owes C ₹200          → 3 transactions → 2
+```
+
+<br/>
+
+## 🛠️ Tech Stack
+
+<table>
+<tr>
+<td valign="top" width="50%">
+
+**Backend**
+- Java 17 · Spring Boot · Spring Cloud
+- Spring Cloud Gateway (routing)
+- Eureka (service discovery)
+- Spring Security + JWT (auth)
+- Apache Kafka on Aiven (event streaming)
+- PostgreSQL on Neon (persistence)
+- Maven
+
+</td>
+<td valign="top" width="50%">
+
+**Frontend & Infra**
+- React 19 + Tailwind CSS
+- Axios for API integration
+- Docker + Docker Compose
+- Kubernetes (orchestration)
+- GitHub Actions (CI/CD)
+- UptimeRobot (service monitoring)
+- Vercel (frontend) · Render (backend)
+
+</td>
+</tr>
+</table>
+
+<br/>
+
+## 🤖 AI Service
+
+Parses natural language expense inputs into structured transaction data using **Spring AI** integrated with **Groq** (Mixtral-8x7B model).
+
+**Example:**
+Input: `"I paid 800 for dinner, split with Ravi and Sam"`
+
+Output:
+{
+  "description": "Dinner",
+  "amount": 800,
+  "participantNames": ["Ravi", "Sam"],
+  "splitType": "EQUAL"
+}
+
+
+**Endpoint:** `POST /api/ai/parse-expense`
+
+**Tech:** Spring Boot, Spring AI, Groq API (OpenAI-compatible), Eureka Client
+
+
+<br/>
+
+## 📂 Microservices
+
+| Service | Responsibility |
+|---|---|
+| `api-gateway` | Single entry point, routes requests to downstream services |
+| `eureka-server` | Service registry & discovery |
+| `user-service` | Registration, login, JWT issuance, profile management |
+| `group-service` | Group creation, membership management |
+| `expense-service` | Expense CRUD, split logic |
+| `settlement-service` | Debt-simplification engine, settlement tracking |
+| `notification-service` | Kafka consumer for real-time alerts |
+| `ai-service` | Natural-language expense parsing |
+
+<br/>
+
+## 🚀 Getting Started
+
+```bash
+# Clone the repo
+git clone https://github.com/dilipMaurya1586/splitsettle.git
+cd splitsettle
+
+# Spin up all services with Docker Compose
+docker-compose up --build
+
+# Frontend
+cd splitsettle-frontend
+npm install
+npm start
+```
+
+Create a `.env` in the frontend root:
+
+```env
+REACT_APP_API_URL=http://localhost:8080
+```
+
+<br/>
+
+## 📡 API Reference
+
+```
+POST   /api/auth/register
+POST   /api/auth/login
+POST   /api/groups
+GET    /api/groups/my
+POST   /api/expenses
+GET    /api/expenses/group/{groupId}
+GET    /api/settlements/group/{groupId}/balances
+POST   /api/settlements/group/{groupId}/calculate
+POST   /api/settlements/{transactionId}/settle
+POST   /api/ai/parse-expense
+```
+
+<br/>
+
+## 🗺️ Roadmap
+
+- [ ] Multi-currency support
+- [ ] Recurring/subscription expenses
+- [ ] Push notifications (mobile)
+- [ ] Payment gateway integration for in-app settlement
+
+<br/>
+
+## 👤 Author
+
+**Dilip Maurya**
+[GitHub](https://github.com/dilipMaurya1586) · [LinkedIn](https://linkedin.com/in/dilip-maurya-9061a0306) · [Portfolio](https://dilipmauryaportfolio.vercel.app)
+
+<br/>
+
+<div align="center">
+
+*If SplitSettle saved you from doing group-trip math on a napkin, consider giving it a ⭐*
+
+</div>
