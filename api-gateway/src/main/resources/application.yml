@@ -32,7 +32,9 @@ spring:
       globalcors:
         corsConfigurations:
           '[/**]':
-            allowedOrigins: "http://localhost:3000"
+            allowedOrigins:
+              - "http://localhost:3000"
+              - "https://splitsettle-frontend.vercel.app"
             allowedMethods:
               - GET
               - POST

@@ -13,6 +13,7 @@ public class CorsConfig {
         CorsConfiguration cors = new CorsConfiguration();
         cors.setAllowCredentials(true);
         cors.addAllowedOrigin("http://localhost:3000");
+        cors.addAllowedOrigin("https://splitsettle-frontend.vercel.app");
         cors.addAllowedMethod("*");
         cors.addAllowedHeader("*");
 
