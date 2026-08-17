@@ -31,13 +31,12 @@ public class ExpenseParsingService {
                     "- amount must be a plain number, no currency symbols.";
 
     public ExpenseParsingService(ChatClient.Builder chatClientBuilder) {
-        this.chatClient = chatClientBuilder
-                .defaultSystem(SYSTEM_PROMPT)
-                .build();
+        this.chatClient = chatClientBuilder.build();
     }
 
     public ParsedExpenseResponse parse(String naturalLanguageInput) {
         String rawResponse = chatClient.prompt()
+                .system(SYSTEM_PROMPT)
                 .user(naturalLanguageInput)
                 .call()
                 .content();
