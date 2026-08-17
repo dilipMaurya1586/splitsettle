@@ -23,7 +23,8 @@ export default function Modal({ open, onClose, title, children, footer }) {
         className="absolute inset-0 bg-ink-900/40 backdrop-blur-[2px] animate-[fadeIn_0.15s_ease-out]"
         onClick={onClose}
       />
-      <div className="relative w-full max-w-md card p-6 shadow-pop animate-[popIn_0.18s_ease-out]">
+      {/* <div className="relative w-full max-w-md card p-6 shadow-pop animate-[popIn_0.18s_ease-out]"> */}
+      <div className="relative w-full max-w-md max-h-[85vh] overflow-y-auto card p-6 shadow-pop animate-[popIn_0.18s_ease-out]">
         <div className="flex items-start justify-between mb-4">
           <h3 className="font-display text-lg font-semibold text-ink-900">{title}</h3>
           <button
