@@ -1,5 +1,7 @@
 package com.splitsettle.groupservice.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
@@ -8,6 +10,8 @@ import java.util.Map;
 @Service
 public class GroupEventPublisher {
 
+    private static final Logger log = LoggerFactory.getLogger(GroupEventPublisher.class);
+
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
     public GroupEventPublisher(KafkaTemplate<String, Object> kafkaTemplate) {
@@ -15,12 +19,45 @@ public class GroupEventPublisher {
     }
 
     public void publishMemberAdded(Long groupId, Long userId, String email) {
-        Map<String, Object> event = Map.of(
-                "groupId", groupId,
-                "userId", userId,
-                "email", email,
-                "eventType", "MEMBER_ADDED"
-        );
-        kafkaTemplate.send("group-member-added", String.valueOf(groupId), event);
+        try {
+            Map<String, Object> event = Map.of(
+                    "groupId", groupId,
+                    "userId", userId,
+                    "email", email,
+                    "eventType", "MEMBER_ADDED"
+            );
+            kafkaTemplate.send("group-member-added", String.valueOf(groupId), event);
+        } catch (Exception e) {
+            log.warn("Could not publish MEMBER_ADDED event for group {} — continuing anyway. Reason: {}",
+                    groupId, e.getMessage());
+        }
     }
 }
+
+
+//package com.splitsettle.groupservice.service;
+//
+//import org.springframework.kafka.core.KafkaTemplate;
+//import org.springframework.stereotype.Service;
+//
+//import java.util.Map;
+//
+//@Service
+//public class GroupEventPublisher {
+//
+//    private final KafkaTemplate<String, Object> kafkaTemplate;
+//
+//    public GroupEventPublisher(KafkaTemplate<String, Object> kafkaTemplate) {
+//        this.kafkaTemplate = kafkaTemplate;
+//    }
+//
+//    public void publishMemberAdded(Long groupId, Long userId, String email) {
+//        Map<String, Object> event = Map.of(
+//                "groupId", groupId,
+//                "userId", userId,
+//                "email", email,
+//                "eventType", "MEMBER_ADDED"
+//        );
+//        kafkaTemplate.send("group-member-added", String.valueOf(groupId), event);
+//    }
+//}
