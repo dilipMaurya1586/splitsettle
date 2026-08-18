@@ -221,6 +221,73 @@ POST   /api/ai/parse-expense
 
 <br/>
 
+# SplitSettle — Pre-Demo Wake-Up Checklist
+
+Render's free tier puts services to sleep after 15 minutes of inactivity.
+Run this checklist **15 minutes before any demo **
+so every service is fully awake before you start.
+
+## Step 1 — Wake all 8 backend services
+
+Open each of these URLs in a new browser tab (all at once is fine):
+
+- https://splitsettle-eureka.onrender.com
+- https://splitsettle-user.onrender.com/actuator/health
+- https://splitsettle-group.onrender.com/actuator/health
+- https://splitsettle-expense.onrender.com/actuator/health
+- https://splitsettle-settlement.onrender.com/actuator/health
+- https://splitsettle-notification.onrender.com/actuator/health
+- https://splitsettle-ai.onrender.com/actuator/health
+- https://splitsettle-api.onrender.com/actuator/health
+
+## Step 2 — Wait
+
+Give it **90 seconds** minimum. Cold starts (DB connect + Eureka registration)
+can take 60–130 seconds per service.
+
+## Step 3 — Confirm on UptimeRobot
+
+Open [dashboard.uptimerobot.com/monitors](https://dashboard.uptimerobot.com/monitors)
+and confirm **all monitors show green (Up)** before you proceed.
+
+Do not start the demo until every monitor is green — a single sleeping
+service (especially `eureka` or `user-service`, which everything else
+depends on) will cause 503 / "No servers available" errors across the app.
+
+## Step 4 — Smoke test
+
+Quickly run through the core flow once yourself before the actual demo:
+
+1. Register a throwaway test account
+2. Log in
+3. Create a group
+4. Add a member
+5. Add an expense (manual + "Describe it" AI mode)
+6. Check Settlements tab
+
+If all 6 pass, you're good to go live.
+
+---
+
+## Why this is needed (for your own reference)
+
+- **Frontend:** Vercel (`splitsettle-frontend.vercel.app`) — always on, no action needed.
+- **Backend:** Render free tier (`eureka`, `user`, `group`, `expense`,
+  `settlement`, `notification`, `ai`, `api-gateway`) — sleeps after 15 min
+  idle, takes ~60–130s to cold start.
+- **Database:** Neon.tech Postgres — always on, no action needed.
+- **Kafka:** Aiven Cloud — always on (unless manually paused in the Aiven
+  console), no action needed.
+- **UptimeRobot** pings all 8 Render services every 5 minutes to *try* to
+  keep them awake, but this isn't 100% guaranteed — hence this manual
+  checklist as a backup before anything important.
+
+**Permanent fix (if budget allows later):** Upgrade the 8 Render services
+to the Starter plan (~$7/month each, ~$56/month total). Paid instances
+never sleep, and this entire checklist becomes unnecessary.
+
+<br />
+
 ## 👤 Author
 
 **Dilip Maurya**
