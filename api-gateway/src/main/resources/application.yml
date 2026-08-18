@@ -13,6 +13,10 @@ spring:
           uri: lb://USER-SERVICE
           predicates:
             - Path=/api/auth/**
+        - id: user-service-users
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/api/users/**
         - id: group-service
           uri: lb://GROUP-SERVICE
           predicates:
@@ -60,3 +64,65 @@ management:
     web:
       exposure:
         include: health,info,gateway
+#server:
+#  port: 8080
+#spring:
+#  application:
+#    name: api-gateway
+#  cloud:
+#    gateway:
+#      discovery:
+#        locator:
+#          enabled: false
+#      routes:
+#        - id: user-service
+#          uri: lb://USER-SERVICE
+#          predicates:
+#            - Path=/api/auth/**
+#        - id: group-service
+#          uri: lb://GROUP-SERVICE
+#          predicates:
+#            - Path=/api/groups/**
+#        - id: expense-service
+#          uri: lb://EXPENSE-SERVICE
+#          predicates:
+#            - Path=/api/expenses/**
+#        - id: settlement-service
+#          uri: lb://SETTLEMENT-SERVICE
+#          predicates:
+#            - Path=/api/settlements/**
+#        - id: ai-service
+#          uri: lb://AI-SERVICE
+#          predicates:
+#            - Path=/api/ai/**
+#      globalcors:
+#        corsConfigurations:
+#          '[/**]':
+#            allowedOrigins:
+#              - "http://localhost:3000"
+#              - "https://splitsettle-frontend.vercel.app"
+#            allowedMethods:
+#              - GET
+#              - POST
+#              - PUT
+#              - DELETE
+#              - OPTIONS
+#            allowedHeaders: "*"
+#            allowCredentials: true
+#            maxAge: 3600
+#
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
+#  instance:
+#    prefer-ip-address: true
+#
+#jwt:
+#  secret: ${JWT_SECRET:ThisIsAVeryLongSecretKeyForJWTSigningPurposesChangeInProd123456}
+#
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: health,info,gateway
