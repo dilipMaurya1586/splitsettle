@@ -40,14 +40,15 @@ export default function ExpenseForm({ groupId, members = [], onSubmit, onCancel,
     const paidByMember = members.find(m => m.email === paidBy)
     const participantIds = members
       .filter(m => splitBetween.includes(m.email))
-      .map(m => m.userId)  // ✅ CHANGE: id → userId
+      .map(m => m.userId ?? m.id)  // ✅ CHANGE: id → userId
 
     onSubmit({
       groupId: parseInt(groupId),
       description: description.trim(),
       amount: Number(amount),
       splitType: 'EQUAL',
-      paidByUserId: paidByMember?.userId,  // ✅ CHANGE: id → userId
+      // paidByUserId: paidByMember?.userId,  // ✅ CHANGE: id → userId
+      paidByUserId: paidByMember?.userId ?? paidByMember?.id,
       participantUserIds: participantIds,
     })
   }

@@ -17,7 +17,8 @@ export default function ExpenseItem({ expense, onEdit, onDelete }) {
 
       <div className="text-right">
         <p className="amount font-semibold text-ink-900">{formatCurrency(expense.amount)}</p>
-        <p className="text-xs text-ink-400">split {expense.splitBetween?.length || 0} ways</p>
+        {/* <p className="text-xs text-ink-400">split {expense.splitBetween?.length || 0} ways</p> */}
+        <p className="text-xs text-ink-400">split {(expense.splits || expense.splitBetween)?.length || 0} ways</p>
       </div>
 
       <div className="hidden group-hover:flex items-center gap-1 pl-2">
