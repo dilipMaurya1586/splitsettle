@@ -125,4 +125,34 @@ public class ExpenseService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Expense not found"));
         return ExpenseResponse.from(expense);
     }
+
+    @Transactional
+    public void deleteExpense(Long expenseId) {
+        Expense expense = expenseRepository.findById(expenseId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Expense not found"));
+        expenseRepository.delete(expense);
+    }
+
+    @Transactional
+    public ExpenseResponse updateExpense(Long expenseId, CreateExpenseRequest request) {
+        Expense expense = expenseRepository.findById(expenseId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Expense not found"));
+
+        expense.setDescription(request.description());
+        expense.setAmount(request.amount());
+        expense.setPaidByUserId(request.paidByUserId());
+        expense.setSplitType(request.splitType());
+        expense.getSplits().clear();
+
+        List<ExpenseSplit> splits = switch (request.splitType()) {
+            case EQUAL -> calculateEqualSplit(request, expense);
+            case EXACT -> calculateExactSplit(request, expense);
+            case PERCENTAGE -> calculatePercentageSplit(request, expense);
+        };
+        expense.getSplits().addAll(splits);
+
+        Expense saved = expenseRepository.save(expense);
+        eventPublisher.publishExpenseCreated(saved);
+        return ExpenseResponse.from(saved);
+    }
 }
