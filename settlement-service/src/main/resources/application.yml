@@ -27,8 +27,11 @@ spring:
       fetch-max-bytes: 1048576
       max-partition-fetch-bytes: 1048576
       properties:
-        receive.buffer.bytes: 65536
-        max.poll.records: 10
+        receive.buffer.bytes: 32768
+        send.buffer.bytes: 32768
+        max.poll.records: 5
+        reconnect.backoff.ms: 1000
+        reconnect.backoff.max.ms: 10000
 
 eureka:
   client:
@@ -45,3 +48,51 @@ management:
     web:
       exposure:
         include: health,info
+
+#server:
+#  port: 8084
+#
+#spring:
+#  application:
+#    name: settlement-service
+#  datasource:
+#    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5436}/${DB_NAME:splitsettle_settlements}?options=-c%20timezone=Asia/Kolkata
+#    #    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5436}/${DB_NAME:splitsettle_settlements}
+#    username: ${DB_USER:postgres}
+#    password: ${DB_PASSWORD:postgres}
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+#    show-sql: false
+#  kafka:
+#    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+#    properties:
+#      security.protocol: ${KAFKA_SECURITY_PROTOCOL}
+#      sasl.mechanism: ${KAFKA_SASL_MECHANISM}
+#      sasl.jaas.config: ${KAFKA_SASL_JAAS_CONFIG}
+#      ssl.truststore.location: /app/truststore.jks
+#      ssl.truststore.password: changeit
+#    consumer:
+#      group-id: settlement-service-group
+#      auto-offset-reset: earliest
+#      fetch-max-bytes: 1048576
+#      max-partition-fetch-bytes: 1048576
+#      properties:
+#        receive.buffer.bytes: 65536
+#        max.poll.records: 10
+#
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
+#  instance:
+#    prefer-ip-address: true
+#
+#jwt:
+#  secret: ${JWT_SECRET:ThisIsAVeryLongSecretKeyForJWTSigningPurposesChangeInProd123456}
+#
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: health,info
