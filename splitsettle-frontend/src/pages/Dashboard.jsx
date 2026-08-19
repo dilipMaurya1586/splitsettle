@@ -53,10 +53,10 @@ export default function Dashboard() {
   }, [])
 
   const totalOwed = pending
-    .filter((t) => (t.toId || t.to) === (user?.id || user?.email))
+    .filter((t) => Number(t.toUserId ?? t.toId ?? t.to) === Number(user?.id))
     .reduce((sum, t) => sum + Number(t.amount || 0), 0)
   const totalOwe = pending
-    .filter((t) => (t.fromId || t.from) === (user?.id || user?.email))
+    .filter((t) => Number(t.fromUserId ?? t.fromId ?? t.from) === Number(user?.id))
     .reduce((sum, t) => sum + Number(t.amount || 0), 0)
   const netBalance = totalOwed - totalOwe
 
@@ -130,16 +130,20 @@ export default function Dashboard() {
                 <EmptyState icon="✓" title="All settled up" description="No pending payments right now — nice." />
               ) : (
                 <div className="card divide-y divide-ink-50">
-                  {pending.slice(0, 5).map((t, idx) => (
-                    <div key={t.id || idx} className="flex items-center gap-3 px-5 py-3.5">
-                      <Avatar name={t.fromName || t.from} size="sm" />
-                      <p className="text-sm text-ink-700 flex-1 min-w-0 truncate">
-                        <span className="font-semibold">{t.fromName || t.from}</span> owes{' '}
-                        <span className="font-semibold">{t.toName || t.to}</span>
-                      </p>
-                      <BalancePill amount={-Math.abs(t.amount)} />
-                    </div>
-                  ))}
+                  {pending.slice(0, 5).map((t, idx) => {
+                    const fromLabel = String(t.fromName || t.from || t.fromUserId || '?')
+                    const toLabel = String(t.toName || t.to || t.toUserId || '?')
+                    return (
+                      <div key={t.id || idx} className="flex items-center gap-3 px-5 py-3.5">
+                        <Avatar name={fromLabel} size="sm" />
+                        <p className="text-sm text-ink-700 flex-1 min-w-0 truncate">
+                          <span className="font-semibold">{fromLabel}</span> owes{' '}
+                          <span className="font-semibold">{toLabel}</span>
+                        </p>
+                        <BalancePill amount={-Math.abs(t.amount)} />
+                      </div>
+                    )
+                  })}
                 </div>
               )}
             </section>
